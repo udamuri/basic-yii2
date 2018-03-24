@@ -47,6 +47,8 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'site/ganti-kategori/<id:[0-9]+>'=>'site/ganti-kategori',
+                'site/hapus-kategori/<id:[0-9]+>'=>'site/hapus-kategori',
             ],
         ],
     ],
