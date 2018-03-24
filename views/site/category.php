@@ -6,6 +6,15 @@ use yii\widgets\ActiveForm;
 
 $this->title = 'Kategori';
 $this->params['breadcrumbs'][] = $this->title;
+
+$jsx = <<< 'SCRIPT'
+   
+   $('.delete_category').on('click', function () {
+        return confirm('Apakah Anda Yakin Akan Menghapus Kategori?');
+    });
+SCRIPT;
+$this->registerJs($jsx);
+
 ?>
 
 <div class="row">

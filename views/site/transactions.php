@@ -8,6 +8,11 @@ $this->title = 'Transaksi';
 $this->params['breadcrumbs'][] = $this->title;
 
 $jsx = <<< 'SCRIPT'
+   
+   $('.delete_transaction').on('click', function () {
+        return confirm('Apakah Anda Yakin Akan Menghapus Transaksi?');
+    });
+    
       $( function() {
     var dateFormat = "mm/dd/yy",
       from = $( "#startdate" )
@@ -112,7 +117,7 @@ $this->registerJs($jsx);
                         <td align="right">'.$pemasukan.'</td>
                         <td align="right">'.$pengeluaran.'</td>
                         <td align="center">
-                          <a class="btn btn-danger btn-xs delete_category" title="Delete" href="'.Yii::$app->homeUrl.'site/hapus-transaksi/'.$value['transaction_id'].'" data-id="'.$value['transaction_id'].'">Hapus</i></a>
+                          <a class="btn btn-danger btn-xs delete_transaction" title="Delete" href="'.Yii::$app->homeUrl.'site/hapus-transaksi/'.$value['transaction_id'].'" data-id="'.$value['transaction_id'].'">Hapus</i></a>
                           <a class="btn btn-success btn-xs" title="Update" href="'.Yii::$app->homeUrl.'site/ganti-transaksi/'.$value['transaction_id'].'" data-id="'.$value['transaction_id'].'">Ubah</a>
                         </td>
                     <tr>';
