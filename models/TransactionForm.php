@@ -70,6 +70,7 @@ class TransactionForm extends Model
     {
         if ($this->validate()) {
             $update = TableTransactions::findOne($id);
+            $update->category_id = $this->category_id;
             $update->transaction_amount = $this->transaction_amount;
             $update->transaction_desc = strip_tags($this->transaction_desc);
             if ($update->save(false)) {
@@ -97,6 +98,18 @@ class TransactionForm extends Model
         }
 
         return null;
+    }
+    
+    public function delete($id)
+    {
+
+        $delete = TableTransactions::findOne($id);
+        if($delete)
+        {
+            return $delete->delete();
+        }
+
+        return null;  
     }
     
     public function isValidDateTime($date)

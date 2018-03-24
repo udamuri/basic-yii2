@@ -51,6 +51,8 @@ $config = [
             'rules' => [
                 'site/ganti-kategori/<id:[0-9]+>'=>'site/ganti-kategori',
                 'site/hapus-kategori/<id:[0-9]+>'=>'site/hapus-kategori',
+                'site/ganti-transaksi/<id:[0-9]+>'=>'site/ganti-transaksi',
+                'site/hapus-transaksi/<id:[0-9]+>'=>'site/hapus-transaksi',
             ],
         ],
     ],

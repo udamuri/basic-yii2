@@ -128,6 +128,77 @@ class SiteController extends Controller
     }
     
     /**
+     * Displays Tambah Transaksi.
+     *
+     * @return Response|string
+     */
+    public function actionTambahTransaksi()
+    {
+        $model = new TransactionForm;
+        
+        if ($model->load(Yii::$app->request->post())) {
+            if ($menu = $model->create()) {
+                Yii::$app->session->setFlash('success', "Berhasil Menambahkan Transaksi Baru");
+                return Yii::$app->getResponse()->redirect(Yii::$app->homeUrl.'site/transaksi');
+            }
+        }
+
+        return $this->render('create_transaction', [
+            'model' => $model,
+        ]);
+    }
+    
+    /**
+     * Displays Ganti Transaksi.
+     *
+     * @return Response|string
+     */
+    public function actionGantiTransaksi($id)
+    {
+        $model = new TransactionForm;
+        $_model = $model->getTransaction($id);
+   
+        if($_model)
+        {
+            if ($model->load(Yii::$app->request->post())) {             
+                if ($menu = $model->update($id)) {
+                    Yii::$app->session->setFlash('success', "Sukser merubah Transaksi");
+                    return $this->redirect(Yii::$app->homeUrl.'site/transaksi');
+                }
+            }
+            return $this->render('update_transaction', [
+                'model' => $model,
+                '_model' => $_model,
+            ]);
+        }
+        else
+        {
+            return $this->redirect(Yii::$app->homeUrl.'site/kategori');
+        }
+    }
+    
+    /**
+     * Ganti Kategori action.
+     *
+     * @return Response
+     */
+    public function actionHapusTransaksi($id)
+    {
+        $model = new TransactionForm;
+
+        if($model->delete($id))
+        {
+            Yii::$app->session->setFlash('success', "Sukser menghapus transaksi");
+            return $this->redirect(Yii::$app->homeUrl.'site/transaksi');
+        }
+        else
+        {
+            Yii::$app->session->setFlash('error', "gagal menghapus transaksi");
+            return $this->redirect(Yii::$app->homeUrl.'site/transaksi');
+        }
+    }
+    
+    /**
      * Display Kategori
      * 
      * @return string
@@ -172,26 +243,6 @@ class SiteController extends Controller
             'search' =>$search
         ]);
     }
-    /**
-     * Displays Tambah Transaksi.
-     *
-     * @return Response|string
-     */
-    public function actionTambahTransaksi()
-    {
-        $model = new TransactionForm;
-        
-        if ($model->load(Yii::$app->request->post())) {
-            if ($menu = $model->create()) {
-                Yii::$app->session->setFlash('success', "Berhasil Menambahkan Transaksi Baru");
-                return Yii::$app->getResponse()->redirect(Yii::$app->homeUrl.'site/transaksi');
-            }
-        }
-
-        return $this->render('create_transaction', [
-            'model' => $model,
-        ]);
-    }
     
     /**
      * Displays Tambah Kategori.
@@ -221,7 +272,7 @@ class SiteController extends Controller
      */
     public function actionGantiKategori($id)
     {
-        $model = new CategoryForm();
+        $model = new CategoryForm;
         $_model = $model->getCategory($id);
    
         if($_model)
@@ -250,7 +301,7 @@ class SiteController extends Controller
      */
     public function actionHapusKategori($id)
     {
-        $model = new CategoryForm();
+        $model = new CategoryForm;
 
         if($model->delete($id))
         {

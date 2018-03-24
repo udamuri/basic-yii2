@@ -13,9 +13,11 @@ use app\models\TableCategory;
         <?php $form = ActiveForm::begin([
             'id' => $form_id,
         ]); 
-            if($form_id === 'form-transaction-category')
+            if($form_id === 'form-update-transaction')
             {
                 $model->category_id = $_model['category_id'] ;
+                $model->transaction_amount = $_model['transaction_amount'] ;
+                $model->transaction_desc = $_model['transaction_desc'] ;
             }
 
         ?>

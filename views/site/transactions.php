@@ -6,6 +6,42 @@ use yii\widgets\ActiveForm;
 
 $this->title = 'Transaksi';
 $this->params['breadcrumbs'][] = $this->title;
+
+$jsx = <<< 'SCRIPT'
+      $( function() {
+    var dateFormat = "mm/dd/yy",
+      from = $( "#startdate" )
+        .datepicker({
+          defaultDate: "+1w",
+          changeMonth: true,
+          numberOfMonths: 3
+        })
+        .on( "change", function() {
+          to.datepicker( "option", "minDate", getDate( this ) );
+        }),
+      to = $( "#enddate" ).datepicker({
+        defaultDate: "+1w",
+        changeMonth: true,
+        numberOfMonths: 3
+      })
+      .on( "change", function() {
+        from.datepicker( "option", "maxDate", getDate( this ) );
+      });
+ 
+    function getDate( element ) {
+      var date;
+      try {
+        date = $.datepicker.parseDate( dateFormat, element.value );
+      } catch( error ) {
+        date = null;
+      }
+ 
+      return date;
+    }
+  } );
+SCRIPT;
+$this->registerJs($jsx);
+
 ?>
 
 <div class="row">
@@ -16,10 +52,10 @@ $this->params['breadcrumbs'][] = $this->title;
         <form  id="searchform" class="input-group"  action="<?=Yii::$app->homeUrl;?>site/transaksi"  method="GET" > 
             <div class="row">
                 <div class="col-md-5">
-                    <input type="text" name="startdate" class="form-control" value="<?=$startdate?>" placeholder="start {2018-01-01}">
+                    <input type="text" id="startdate" name="startdate" class="form-control" value="<?=$startdate?>" placeholder="start {2018-01-01}">
                 </div>
                 <div class="col-md-5">
-                    <input type="text" name="enddate" class="form-control" value="<?=$enddate?>" placeholder="end {2018-01-07}" >
+                    <input type="text" id="enddate" name="enddate" class="form-control" value="<?=$enddate?>" placeholder="end {2018-01-07}" >
                 </div>
                 <div class="col-md-2">
                     <button class="btn btn-default" type="submit">Go!</button>
@@ -47,6 +83,7 @@ $this->params['breadcrumbs'][] = $this->title;
                   <td>Tanggal Transaksi</td>
                   <td>Pemasukan</td>
                   <td>Pengeluaran</td>
+                  <td width="13%">Action</td>
               </tr>
             </thead>
             <tbody>
@@ -74,6 +111,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         <td>'.$value['transaction_date'].'</td>
                         <td align="right">'.$pemasukan.'</td>
                         <td align="right">'.$pengeluaran.'</td>
+                        <td align="center">
+                          <a class="btn btn-danger btn-xs delete_category" title="Delete" href="'.Yii::$app->homeUrl.'site/hapus-transaksi/'.$value['transaction_id'].'" data-id="'.$value['transaction_id'].'">Hapus</i></a>
+                          <a class="btn btn-success btn-xs" title="Update" href="'.Yii::$app->homeUrl.'site/ganti-transaksi/'.$value['transaction_id'].'" data-id="'.$value['transaction_id'].'">Ubah</a>
+                        </td>
                     <tr>';
                 }
             ?>
