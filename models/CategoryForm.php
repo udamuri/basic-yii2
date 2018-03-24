@@ -101,27 +101,6 @@ class CategoryForm extends Model
         return null;
     }
 
-    public function setStatus($id)
-    {
-        $set = TableCategory::findOne($id);
-
-        if($set)
-        {
-            if($set->category_status == 1)
-            {
-                $set->category_status = 0;
-            }
-            else
-            {
-                $set->category_status = 1 ;
-            }
-            $set->save(false);
-            return $set->category_status;
-        }
-
-        return false;
-    }
-    
 	/**
      * @inheritdoc
      */

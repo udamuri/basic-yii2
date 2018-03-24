@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\CategoryForm;
+use app\models\TransactionForm;
 
 class SiteController extends Controller
 {
@@ -66,6 +67,66 @@ class SiteController extends Controller
         return $this->render('index');
     }
     
+    public function actionTransaksi()
+    {
+        $model = new TransactionForm;
+        $startdate = '';
+        if(isset($_GET['startdate']))
+        {
+            $startdate =  $_GET['startdate'];
+        }
+        
+        $enddate = '';
+        if(isset($_GET['enddate']))
+        {
+            $enddate =  $_GET['enddate'];
+        }
+        
+        $query = (new \yii\db\Query())
+                    ->select([
+                        'tt.transaction_id',
+                        'tt.category_id',
+                        'tc.category_name',
+                        'tc.category_status',
+                        'tt.transaction_desc',
+                        'tt.transaction_date',
+                        'tt.transaction_amount',
+                    ])
+                    ->from('tbl_transactions tt')
+                    ->leftJoin('tbl_category tc', 'tc.category_id = tt.category_id');
+        
+        $isDate = $model->isValidDateTime($startdate) && $model->isValidDateTime($enddate) ? true : false;
+        if($isDate && $startdate !== '' && $enddate !== '')
+        {
+            $query->where('tt.transaction_date between  "'.$startdate.'" AND "'.$enddate.'" ');
+        } else {
+            $query->where(['year(tt.transaction_date)'=>date('Y')])
+                  ->andWhere(['month(tt.transaction_date)'=>date('m')]);
+            $startdate = '';
+            $enddate = '';
+        }
+        
+        $countQuery = clone $query;
+        $pageSize = 10;
+        $pages = new Pagination([
+                'totalCount' => $countQuery->count(), 
+                'pageSize'=>$pageSize
+            ]);
+        $models = $query->offset($pages->offset)
+            ->limit($pages->limit)
+            ->orderBy(['transaction_id'=>SORT_DESC])
+            ->all();
+            
+        return $this->render('transactions', [
+            'models' => $models,
+            'pages' => $pages,
+            'offset' =>$pages->offset,
+            'page' =>$pages->page,
+            'startdate' =>$startdate,
+            'enddate' =>$enddate,
+        ]);
+    }
+    
     /**
      * Display Kategori
      * 
@@ -109,6 +170,26 @@ class SiteController extends Controller
             'offset' =>$pages->offset,
             'page' =>$pages->page,
             'search' =>$search
+        ]);
+    }
+    /**
+     * Displays Tambah Transaksi.
+     *
+     * @return Response|string
+     */
+    public function actionTambahTransaksi()
+    {
+        $model = new TransactionForm;
+        
+        if ($model->load(Yii::$app->request->post())) {
+            if ($menu = $model->create()) {
+                Yii::$app->session->setFlash('success', "Berhasil Menambahkan Transaksi Baru");
+                return Yii::$app->getResponse()->redirect(Yii::$app->homeUrl.'site/transaksi');
+            }
+        }
+
+        return $this->render('create_transaction', [
+            'model' => $model,
         ]);
     }
     

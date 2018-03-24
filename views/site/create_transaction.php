@@ -8,21 +8,20 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 //use yii\helpers\ArrayHelper;
 
-$this->title = 'Ubah';
+$this->title = 'Tambah';
 $this->params['breadcrumbs'][] = [
-    'label' =>'Kategori',
-    'url' => Yii::$app->homeUrl.'site/kategori'
+    'label' =>'Transaksi',
+    'url' => Yii::$app->homeUrl.'site/transaksi'
 ];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="row">
     <div class="col-md-12">
-        <?= $this->render('_form_category', [
+        <?= $this->render('_form_transaction', [
             'model' => $model,
-            '_model' => $_model,
-            'form_id' => 'form-update-category',
-            'button' => 'Rubah',
+            'form_id' => 'form-create-transaction',
+            'button' => 'Simpan',
         ]) ?>
     </div>
 </div>

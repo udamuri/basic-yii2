@@ -11,7 +11,7 @@ use yii\bootstrap\ActiveForm;
 $this->title = 'Tambah';
 $this->params['breadcrumbs'][] = [
     'label' =>'Kategori',
-    'url' => Yii::$app->homeUrl.'kategori'
+    'url' => Yii::$app->homeUrl.'site/kategori'
 ];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
