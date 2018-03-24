@@ -12,6 +12,7 @@ use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\CategoryForm;
 use app\models\TransactionForm;
+use app\models\HomeHelper;
 
 class SiteController extends Controller
 {
@@ -64,7 +65,16 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $model = new HomeHelper;
+        $pemasukan = $model->getTransaction('pemasukan');
+        $pengeluaran = $model->getTransaction('pengeluaran');
+        
+        $total = (int) $pemasukan - (int) $pengeluaran;
+        return $this->render('index', [
+            'pemasukan' => $pemasukan,
+            'pengeluaran' => $pengeluaran,
+            'total' => $total,
+        ]);
     }
     
     public function actionTransaksi()
